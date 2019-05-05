@@ -72,10 +72,10 @@ var connection = mysql.createConnection({
                       chosen = results[i];
                   }
               }
-              if(chosen.stock_quantity > parseInt(answer.quantity)) {
+              if(chosen.stock > parseInt(answer.quantity)) {
                   connection.query("UPDATE products SET ? WHERE ?", [
                       {
-                          stock_quantity: (chosen.stock_quantity - parseInt(answer.quantity))
+                          stock: (chosen.stock - parseInt(answer.quantity))
                       },
                       {
                           id: chosen.id
