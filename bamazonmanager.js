@@ -2,6 +2,8 @@
 
 var inquirer = require("inquirer");
 var mysql = require("mysql");
+require('events').EventEmitter.defaultMaxListeners = 15;
+
 //----------------------------------
 
 var connection = mysql.createConnection({
@@ -85,6 +87,7 @@ function lowInventory() {
             console.log("===============================");            
             if(results) {
                 console.log("All items are stocked.");
+                process.on('warning', e => console.warn(e.stack))
                 start();
             }
         }
@@ -96,7 +99,7 @@ function lowInventory() {
 
 //If a manager selects Add to Inventory, your app should display a prompt that will let the manager "add more" of any item currently in the store.
 function addStock() {
-    console.log("ADD TO STOCK");
+    //console.log("ADD TO STOCK");
     inquirer.prompt([
         {
             name: "stockID",
@@ -106,7 +109,7 @@ function addStock() {
         {
             name: "stockQuantity",
             type: "input",
-            message: "How many of this item would you like to add?"
+            message: "How many of this item would you like to have in stock?"
         }
     ]).then(function(answer) {
         var ID = answer.stockID;
@@ -116,7 +119,7 @@ function addStock() {
         connection.query("UPDATE products SET ? WHERE ?",
         [
             {
-               stock: stock + quantity 
+               stock: quantity 
             },
             {
                 id: ID
